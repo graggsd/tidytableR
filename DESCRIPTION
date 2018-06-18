@@ -1,7 +1,7 @@
 Package: tidytableR
 Type: Package
 Title: Builds Tables from Tidy Datasets
-Version: 0.1.0.9000
+Version: 0.1.0
 Author: Stephen Gragg
 Maintainer: Stephen Gragg <graggsd@gmail.com>
 Description: The purpose of this package is to reshape the output of an analysis
