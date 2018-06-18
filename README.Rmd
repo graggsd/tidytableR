@@ -12,6 +12,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+[![Build Status](https://travis-ci.org/graggsd/tidytableR.svg?branch=master)](https://travis-ci.org/graggsd/tidytableR)
+
 # tidytableR
 
 The goal of tidytableR is to is to reshape the output of an analysis
