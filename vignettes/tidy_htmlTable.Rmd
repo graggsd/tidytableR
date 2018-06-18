@@ -25,7 +25,10 @@ of key and value columns.
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidytableR)
-library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+library(tibble)
 
 ```
 

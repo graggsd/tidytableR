@@ -76,7 +76,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p><code>tidyHtmlTable</code> acts as a wrapper function for the <code>htmlTable</code> function allowing columns to be mapped from the input data to specific htmlTable parameters in a manner similar to ggplot2.</p>
+<p><code>tidy_htmlTable</code> acts as a wrapper function for the <code>htmlTable</code> function allowing columns to be mapped from the input data to specific htmlTable parameters in a manner similar to ggplot2.</p>
 </div>
 <div id="some-examples" class="section level1">
 <h1>Some Examples</h1>
@@ -84,7 +84,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Prepare Data</h2>
 <p>We’ll begin by turning the <code>mtcars</code> data into a tidy dataset. The <code>gather</code> function is called to collect 3 performance metrics into a pair of key and value columns.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytableR)
-<span class="kw">library</span>(tidyverse)</code></pre></div>
+<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(tidyr)
+<span class="kw">library</span>(tibble)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">td &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span>
 <span class="st">    </span>rownames_to_column <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">select</span>(rowname, cyl, gear, hp, mpg, qsec) <span class="op">%&gt;%</span>
