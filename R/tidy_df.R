@@ -110,6 +110,11 @@ tidy_df.data.frame <-
 
         if (!is.null(collapse)) {
 
+            if(!is.character(class(collapse)) |
+               (length(collapse) != 1)) {
+                stop("collapse must be of class character and length 1")
+            }
+
             row_ref <- row_ref %>%
                 apply(1, paste, collapse = collapse)
 
@@ -118,10 +123,11 @@ tidy_df.data.frame <-
 
             col_ref <- col_ref %>%
                 apply(1, paste, collapse = collapse)
-            colnames(df) <- col_ref
+            # colnames(df) <- col_ref
 
             df <- data.frame(row_ref, df, stringsAsFactors = FALSE)
             colnames(df)[1] <- row_ref_name
+            colnames(df)[2:ncol(df)] <- col_ref
             return(df)
 
         } else {
@@ -138,6 +144,9 @@ tidy_df.data.frame <-
             colnames(empty_block) <- row_ref_name
 
             row_ref <- rbind(empty_block, row_ref)
-            return(cbind(row_ref, df))
+            df <- cbind(row_ref, df)
+            colnames(df) <- 1:ncol(df)
+            rownames(df) <- 1:nrow(df)
+            return(df)
         }
     }

@@ -13,18 +13,22 @@ knitr::opts_chunk$set(
 ```
 
 [![Build Status](https://travis-ci.org/graggsd/tidytableR.svg?branch=master)](https://travis-ci.org/graggsd/tidytableR)
+[![Build status](https://ci.appveyor.com/api/projects/status/nsalen7ay5tuwpqd/branch/master?svg=true)](https://ci.appveyor.com/project/graggsd/tidytabler/branch/master)
 
 # tidytableR
 
-The goal of tidytableR is to is to reshape the output of an analysis
-from a tidy format into a for suitable for presentation. It allows users to 
+The goal of tidytableR is to is to reshape data from a tidy format into 
+one that is suitable for presentation. Specifically, it works best when used 
+to make complex, publication-quality tables from output created by
+`dplyr::summarise` or `tidyr::gather`. It allows users to 
 map column names from an input data frame to elements of an output table.
 
 The package was developed from code meant to act as a wrapper script for the 
 `htmlTable` function in the 
 [htmlTable](https://cran.r-project.org/web/packages/htmlTable/index.html)
-package. Therfore, many of the variable names and symantics are related to
-those used in the `htmlTable` package.
+package. In fact, its first release was as the `tidyHtmlTable` function within
+the `htmlTable` package. Therefore, many of the variable names and symantics 
+used within are related to those used in the `htmlTable` package.
 
 ## Installation
 
@@ -35,3 +39,64 @@ You can install tidytableR from github with:
 devtools::install_github("graggsd/tidytableR")
 ```
 
+## Examples
+
+```{r, message=FALSE, warning=FALSE}
+library(tidytableR)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+library(tibble)
+```
+
+### Prep Data
+
+Turn `mtcars` data into a tidy dataset.
+
+```{r}
+td <- mtcars %>%
+    rownames_to_column %>%
+    select(rowname, cyl, gear, hp, mpg, qsec) %>%
+    gather(per_metric, value, hp, mpg, qsec)
+```
+
+
+Compute 4 summary statistics for each of the 3 performance metrics,
+grouped number of cylinders and gears.
+
+```{r}
+tidy_summary <- td %>%
+    group_by(cyl, gear, per_metric) %>% 
+    summarise(Mean = round(mean(value), 1),
+              SD = round(sd(value), 1),
+              Min = round(min(value), 1),
+              Max = round(max(value), 1)) %>%
+    gather(summary_stat, value, Mean, SD, Min, Max) %>% 
+    ungroup %>% 
+    mutate(gear = paste(gear, "Gears"),
+           cyl = paste(cyl, "Cylinders"))
+```
+
+### Output html table
+
+#### Example 1
+
+```{r}
+tidy_summary  %>% 
+    tidy_htmlTable(header = "gear",
+                   cgroup1 = "cyl",
+                   cell_value = "value", 
+                   rnames = "summary_stat",
+                   rgroup = "per_metric")
+```
+
+#### Example 2
+
+```{r}
+tidy_summary  %>% 
+    tidy_htmlTable(header = "summary_stat",
+                   cgroup1 = "per_metric",
+                   cell_value = "value", 
+                   rnames = "gear",
+                   rgroup = "cyl")
+```
