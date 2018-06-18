@@ -1,5 +1,5 @@
 ---
-title: "Using tidyHtmlTable"
+title: "Using tidy_htmlTable"
 author: "Stephen Gragg"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
