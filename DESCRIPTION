@@ -10,9 +10,12 @@ Description: The purpose of this package is to reshape the output of an analysis
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
+Suggests: testthat,
+    knitr,
+    rmarkdown
 Imports: dplyr,
     tidyr,
     magrittr,
     htmlTable
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr
