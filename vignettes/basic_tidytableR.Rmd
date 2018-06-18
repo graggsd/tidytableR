@@ -1,0 +1,152 @@
+---
+title: "Basic use of tidytableR"
+author: "Stephen Gragg"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basic use of tidytableR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+`tidy_htmlTable` acts as a wrapper function for the `htmlTable`
+function allowing columns to be mapped from the input data to specific htmlTable 
+parameters in a manner similar to ggplot2.
+
+`tidy_df` acts in a similar manner, except that it outputs a `data.frame` to 
+make saving its output into tabular files easier.
+
+# Example Use
+
+## Prepare Data
+
+We'll begin by turning the `mtcars` data into a tidy dataset. The 
+`gather` function is called to collect 3 performance metrics into a pair 
+of key and value columns.
+
+```{r, message=FALSE, warning=FALSE}
+library(tidytableR)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+library(tibble)
+```
+
+```{r}
+td <- mtcars %>%
+    rownames_to_column %>%
+    select(rowname, cyl, gear, hp, mpg, qsec) %>%
+    gather(per_metric, value, hp, mpg, qsec)
+```
+
+Now we will compute 4 summary statistics for each of the 3 performance metrics.
+This will be further grouped by number of cylinders and gears.
+
+```{r}
+tidy_summary <- td %>%
+    group_by(cyl, gear, per_metric) %>% 
+    summarise(Mean = round(mean(value), 1),
+              SD = round(sd(value), 1),
+              Min = round(min(value), 1),
+              Max = round(max(value), 1)) %>%
+    gather(summary_stat, value, Mean, SD, Min, Max) %>% 
+    ungroup %>% 
+    mutate(gear = paste(gear, "Gears"),
+           cyl = paste(cyl, "Cylinders"))
+```
+
+Though in this format, `tidy_summary` is easy to pass onto functions within
+`ggplot2`, with 86 rows, it is not conducive to presentating as a table. Though
+`tidyr` may be used to create a wide format, this will take some work, and there 
+will still be additional steps if one wishes to present the data using the
+`htmlTable` package. The `tidytableR` package was created to shortcut these
+steps.
+
+## `tidy_htmlTable`
+
+Columns from `tidy_summary` may be mapped directly to arguments within the 
+`htmlTable` function similar to the way that columns are mapped to elements
+of a plot within `ggplot2`. That said, to use functions within this package 
+appropriately, it is important to be familiar with the `htmlTable` package.
+
+Note that, at minimum, the `value`, `rnames`, and `header` arguments must be
+specified.
+
+Also, the combination of `rnames` and `header` 
+(additionally, `rgroup`,  `tspanner`, `cgroup1`, and `cgroup2`, if they 
+are specified by the user) must form a unique key for each row. 
+This will most often occur naturally if the the input data has been created 
+`dplyr::summarise` or `tidyr::gather`, which are the primary use cases for these
+functions.
+
+### Example 1
+
+```{r}
+tidy_summary  %>% 
+    tidy_htmlTable(header = "gear",
+                   cgroup1 = "cyl",
+                   cell_value = "value", 
+                   rnames = "summary_stat",
+                   rgroup = "per_metric")
+```
+
+### Example 2
+
+```{r}
+tidy_summary  %>% 
+    tidy_htmlTable(header = "summary_stat",
+                 cgroup1 = "per_metric",
+                 cell_value = "value", 
+                 rnames = "gear",
+                 rgroup = "cyl")
+```
+
+## `tidy_df`
+
+Often, a tabular data file will be desired for sharing or manual editing.
+`tidy_df` has the same functionality as `tidy_htmlTable`, but returns 
+a `data.frame` instead of html code.
+
+### Without collapsing
+
+By default, the output of `tidy_df` will include extra columns on the left 
+margin of the output `data.frame` to designate values for `tspanner`, 
+`rgroup`, and `rnames` (ordered from outside to inside respectively), and the
+top margin to designate `cgroup2`, `cgroup1`, and `header` values
+(ordered from outside to inside respectively).
+
+```{r}
+tidy_summary  %>%
+    # So that output may be displayed appropriately
+    filter(cyl != "6 Cylinders") %>% 
+    tidy_df(header = "gear",
+            cgroup1 = "cyl",
+            cell_value = "value", 
+            rnames = "summary_stat",
+            rgroup = "per_metric")
+```
+
+### With collapsing
+
+As an alternative, a character string may be specified in the `collapse` 
+argument, which will result in `tspanner`, `rgroup`, and `rnames` being 
+combined into a single term `collapse` and included as a single column on the 
+far left margin of the table, and `cgroup2`, `cgroup1`, and `header` receiving 
+the same treatment, but being used to name columns of the output `data.frame`.
+
+```{r}
+tidy_summary  %>%
+    # So that output may be displayed appropriately
+    filter(cyl != "6 Cylinders",
+           cyl != "8 Cylinders", 
+           gear != "5 Gears") %>% 
+    tidy_df(header = "gear",
+            cgroup1 = "cyl",
+            cell_value = "value", 
+            rnames = "summary_stat",
+            rgroup = "per_metric",
+            collapse = ".")
+```
+

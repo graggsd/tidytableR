@@ -5,9 +5,9 @@
 tidytableR
 ==========
 
-The goal of tidytableR is to is to reshape the output of an analysis from a tidy format into a for suitable for presentation. It allows users to map column names from an input data frame to elements of an output table.
+The goal of tidytableR is to is to reshape data from a tidy format into one that is suitable for presentation. Specifically, it works best when used to make complex, publication-quality tables from output created by `dplyr::summarise` or `tidyr::gather`. It allows users to map column names from an input data frame to elements of an output table.
 
-The package was developed from code meant to act as a wrapper script for the `htmlTable` function in the [htmlTable](https://cran.r-project.org/web/packages/htmlTable/index.html) package. In fact, its first release was as the `tidyHtmlTable` function within this same package. Therfore, many of the variable names and symantics are related to those used in the `htmlTable` package.
+The package was developed from code meant to act as a wrapper script for the `htmlTable` function in the [htmlTable](https://cran.r-project.org/web/packages/htmlTable/index.html) package. In fact, its first release was as the `tidyHtmlTable` function within the `htmlTable` package. Therefore, many of the variable names and symantics used within are related to those used in the `htmlTable` package.
 
 Installation
 ------------
@@ -64,10 +64,10 @@ tidy_summary <- td %>%
 ``` r
 tidy_summary  %>% 
     tidy_htmlTable(header = "gear",
-                 cgroup1 = "cyl",
-                 cell_value = "value", 
-                 rnames = "summary_stat",
-                 rgroup = "per_metric")
+                   cgroup1 = "cyl",
+                   cell_value = "value", 
+                   rnames = "summary_stat",
+                   rgroup = "per_metric")
 ```
 
 <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
@@ -569,10 +569,10 @@ NaN
 ``` r
 tidy_summary  %>% 
     tidy_htmlTable(header = "summary_stat",
-                 cgroup1 = "per_metric",
-                 cell_value = "value", 
-                 rnames = "gear",
-                 rgroup = "cyl")
+                   cgroup1 = "per_metric",
+                   cell_value = "value", 
+                   rnames = "gear",
+                   rgroup = "cyl")
 ```
 
 <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
