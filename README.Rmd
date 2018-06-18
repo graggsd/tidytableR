@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
 ```
 
 [![Build Status](https://travis-ci.org/graggsd/tidytableR.svg?branch=master)](https://travis-ci.org/graggsd/tidytableR)
+[![Build status](https://ci.appveyor.com/api/projects/status/nsalen7ay5tuwpqd/branch/master?svg=true)](https://ci.appveyor.com/project/graggsd/tidytabler/branch/master)
 
 # tidytableR
 
