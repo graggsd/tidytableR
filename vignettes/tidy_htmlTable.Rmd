@@ -29,7 +29,6 @@ library(magrittr)
 library(dplyr)
 library(tidyr)
 library(tibble)
-
 ```
 
 ```{r}
@@ -56,12 +55,13 @@ tidy_summary <- td %>%
            cyl = paste(cyl, "Cylinders"))
 ```
 
-At this point, we are ready to implement the `htmlTable` function.
+At this point, we are ready to implement the `tidy_htmlTable` function.
 Essentially, this constructs an html table using arguments similar to the 
-`htmlTable` function. However, whereas `htmlTable` required the user to manually
+`htmlTable` function from the `htmlTable` package.
+However, whereas `htmlTable` required the user to manually
 arrange the data and specify the column groups, headers, row names, row-groups,
 etc., each of these components of the table is mapped to a column within the
-input data.
+input data when using `tidy_htmlTable`.
 
 ## Output html table
 

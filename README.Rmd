@@ -36,3 +36,64 @@ You can install tidytableR from github with:
 devtools::install_github("graggsd/tidytableR")
 ```
 
+## Examples
+
+```{r, message=FALSE, warning=FALSE}
+library(tidytableR)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+library(tibble)
+```
+
+### Prep Data
+
+Turn `mtcars` data into a tidy dataset.
+
+```{r}
+td <- mtcars %>%
+    rownames_to_column %>%
+    select(rowname, cyl, gear, hp, mpg, qsec) %>%
+    gather(per_metric, value, hp, mpg, qsec)
+```
+
+
+Compute 4 summary statistics for each of the 3 performance metrics,
+grouped number of cylinders and gears.
+
+```{r}
+tidy_summary <- td %>%
+    group_by(cyl, gear, per_metric) %>% 
+    summarise(Mean = round(mean(value), 1),
+              SD = round(sd(value), 1),
+              Min = round(min(value), 1),
+              Max = round(max(value), 1)) %>%
+    gather(summary_stat, value, Mean, SD, Min, Max) %>% 
+    ungroup %>% 
+    mutate(gear = paste(gear, "Gears"),
+           cyl = paste(cyl, "Cylinders"))
+```
+
+### Output html table
+
+#### Example 1
+
+```{r}
+tidy_summary  %>% 
+    tidy_htmlTable(header = "gear",
+                 cgroup1 = "cyl",
+                 cell_value = "value", 
+                 rnames = "summary_stat",
+                 rgroup = "per_metric")
+```
+
+#### Example 2
+
+```{r}
+tidy_summary  %>% 
+    tidy_htmlTable(header = "summary_stat",
+                 cgroup1 = "per_metric",
+                 cell_value = "value", 
+                 rnames = "gear",
+                 rgroup = "cyl")
+```
