@@ -3,7 +3,7 @@ Type: Package
 Title: Builds Tables from Tidy Datasets
 Version: 0.1.0
 Author: Stephen Gragg
-Maintainer: Stephen Gragg <graggsd@gmail.com>
+Maintainer: Stephen Gragg <graggsd@uab.edu>
 Description: The purpose of this package is to reshape the output of an analysis
     from a tidy format into a for suitable for presentation. It allows users to 
     map column names from an input data frame to elements of an output table.
