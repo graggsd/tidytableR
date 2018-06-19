@@ -25,7 +25,7 @@ map column names from an input data frame to elements of an output table.
 
 The package was developed from code meant to act as a wrapper script for the 
 `htmlTable` function in the 
-[htmlTable](https://cran.r-project.org/web/packages/htmlTable/index.html)
+[htmlTable](https://CRAN.R-project.org/package=htmlTable)
 package. In fact, its first release was as the `tidyHtmlTable` function within
 the `htmlTable` package. Therefore, many of the variable names and symantics 
 used within are related to those used in the `htmlTable` package.
@@ -34,7 +34,7 @@ used within are related to those used in the `htmlTable` package.
 
 You can install tidytableR from github with:
 
-```{r gh-installation, eval = FALSE}
+```{r gh-installation, eval = FALSE, warning=FALSE}
 # install.packages("devtools")
 devtools::install_github("graggsd/tidytableR")
 ```
